@@ -10,7 +10,7 @@ import javax.inject.Inject
 class SearchUserApplication: BaseApplication() {
 
 
-    private val appComponent: AppComponent by lazy {
+    val appComponent: AppComponent by lazy {
         initDagger()
     }
 

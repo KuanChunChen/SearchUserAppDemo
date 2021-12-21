@@ -84,9 +84,8 @@ abstract class BaseObserver <T> : Observer<T> {
         /**自定義android 端 error code  **/
 
         companion object {
-            val UNKNOWN = 1000
-            val PARSE_ERROR = 1001
-            const val RESULT_CODE_ERROR = 1002
+            const val UNKNOWN = 1000
+            const val PARSE_ERROR = 1001
 
         }
     }

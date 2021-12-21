@@ -7,14 +7,11 @@ import java.io.IOException
 import java.io.InterruptedIOException
 
 class RetryRequestByFailed internal constructor(builder: Builder) : Interceptor {
-    var executionCount: Int = 0
-    /**
-     * retry interval
-     */
+    private var executionCount: Int = 0
     private val retryInterval: Long
 
     init {
-        this.executionCount = builder.executionCount
+        this.executionCount = builder.retryCount
         this.retryInterval = builder.retryInterval
     }
 
@@ -58,20 +55,20 @@ class RetryRequestByFailed internal constructor(builder: Builder) : Interceptor 
     }
 
     class Builder {
-        internal var executionCount: Int = 0
+        internal var retryCount: Int = 0
         internal var retryInterval: Long = 0
 
         init {
-            executionCount = 3
+            retryCount = 0
             retryInterval = 1000
         }
 
-        fun executionCount(executionCount: Int): Builder {
-            this.executionCount = executionCount
+        fun setRetryCount(retryCount: Int): Builder {
+            this.retryCount = retryCount
             return this
         }
 
-        fun retryInterval(retryInterval: Long): Builder {
+        fun setRetryInterval(retryInterval: Long): Builder {
             this.retryInterval = retryInterval
             return this
         }

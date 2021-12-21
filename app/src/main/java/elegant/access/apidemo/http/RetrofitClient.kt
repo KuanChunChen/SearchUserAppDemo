@@ -19,8 +19,6 @@ object RetrofitClient {
     private var gsonBuilder: GsonBuilder = GsonBuilder()
 
 
-//    var httpBuilder: OkHttpClient.Builder? = null
-
     init {
         gsonBuilder
             .setPrettyPrinting()
@@ -39,8 +37,11 @@ object RetrofitClient {
 
         synchronized(RetrofitClient::class.java) {
 
-//            val isShowLog = false
-            val okHttpClient = build(true, connectTimeout, readTimeout, writeTimeout)
+            val okHttpClient = build(
+                connectTimeout = connectTimeout,
+                readTimeout = readTimeout,
+                writeTimeout = writeTimeout
+            )
 
 
             return Retrofit.Builder()
