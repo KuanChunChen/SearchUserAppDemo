@@ -1,6 +1,5 @@
-package elegant.access.apidemo.search
+package elegant.access.apidemo.search.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +8,12 @@ import android.widget.TextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import elegant.access.apidemo.R
 import elegant.access.apidemo.search.model.SearchUserAdapterData
 
 
 class SearchUserAdapter : PagedListAdapter<SearchUserAdapterData, SearchUserAdapter.SearchUserViewHolder>(DiffCallback()) {
-
-
-
-    override fun onBindViewHolder(holder: SearchUserViewHolder, position: Int) {
-        holder.textUserName.text = getItem(position).toString()
-        Log.d("testst", itemCount.toString())
-    }
 
     companion object {
         const val CHILD = 0
@@ -28,10 +21,26 @@ class SearchUserAdapter : PagedListAdapter<SearchUserAdapterData, SearchUserAdap
 
     override fun getItemViewType(position: Int): Int = CHILD
 
+
+    override fun onBindViewHolder(holder: SearchUserViewHolder, position: Int) {
+        holder.textUserName.text = getItem(position)?.userName
+        holder.textItemPosition.text = (position + 1).toString()
+        holder.textUserLink.text = getItem(position)?.userName
+        holder.textUserLink.text = getItem(position)?.githubUrl
+
+        Glide.with(holder.imageAvatarPhoto.context)
+            .load(getItem(position)?.avatarUrl)
+            .centerCrop()
+            .fitCenter()
+            .into(holder.imageAvatarPhoto)
+
+    }
+
+
     class SearchUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageAvatarPhoto: ImageView = itemView.findViewById(R.id.avatarPhoto)
         var textUserName: TextView = itemView.findViewById(R.id.userName)
-        var textUserScore: TextView = itemView.findViewById(R.id.userScore)
+        var textItemPosition: TextView = itemView.findViewById(R.id.itemPosition)
         var textUserLink: TextView = itemView.findViewById(R.id.userLink)
     }
 

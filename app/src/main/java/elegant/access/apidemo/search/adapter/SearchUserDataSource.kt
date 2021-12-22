@@ -1,6 +1,5 @@
 package elegant.access.apidemo.search.adapter
 
-import android.util.Log
 import androidx.paging.PageKeyedDataSource
 import elegant.access.apidemo.http.observer.GitHubResultObserver
 import elegant.access.apidemo.search.SearchUserRepo
@@ -10,31 +9,41 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class SearchUserDataSource(private val searchUserRepo: SearchUserRepo) : PageKeyedDataSource<Int, SearchUserAdapterData>() {
+class SearchUserDataSource(
+    private val searchUserRepo: SearchUserRepo
+) : PageKeyedDataSource<Int, SearchUserAdapterData>() {
 
 
     override fun loadInitial(
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, SearchUserAdapterData>
     ) {
-        Log.i("test:loadInitial", "Loading Rang " + params.placeholdersEnabled + " Count " + params.requestedLoadSize);
 
-        searchUserRepo.searchUser("gg",1,8)
+        val initPage = 1
+        val initPerPage = 30
+
+
+        searchUserRepo.searchUser(initPage, initPerPage)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object :GitHubResultObserver<SearchUserResult>(){
+            .subscribe(object : GitHubResultObserver<SearchUserResult>() {
                 override fun onSuccess(data: SearchUserResult) {
-                    Log.d("test","onSuccess")
+                    val nextKey: Int? = if (data.total_count == 30) null else (initPage + 1)
+
                     val listSearchUser = arrayListOf<SearchUserAdapterData>()
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    callback.onResult(listSearchUser, 1, 2)
-                    Log.d("test","onResult")
+                    data.items.forEach { userItem ->
+
+                        listSearchUser.add(
+                            SearchUserAdapterData(
+                                id = userItem.id,
+                                userName = userItem.login,
+                                avatarUrl = userItem.avatar_url,
+                                githubUrl = userItem.url,
+                                score = userItem.score,
+                            )
+                        )
+                    }
+                    callback.onResult(listSearchUser, initPage, nextKey)
 
                 }
 
@@ -46,23 +55,27 @@ class SearchUserDataSource(private val searchUserRepo: SearchUserRepo) : PageKey
         callback: LoadCallback<Int, SearchUserAdapterData>
     ) {
 
-        Log.i("test:loadAfter", "Loading Rang " + params.key + " Count " + params.requestedLoadSize);
+        searchUserRepo.searchUser(params.key, params.requestedLoadSize)
 
-        searchUserRepo.searchUser("gg",params.key,params.requestedLoadSize)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object :GitHubResultObserver<SearchUserResult>(){
+            .subscribe(object : GitHubResultObserver<SearchUserResult>() {
                 override fun onSuccess(data: SearchUserResult) {
-                    Log.d("test","onSuccess")
                     val nextKey: Int? = if (params.key == 43563) null else (params.key + 1)
 
                     val listSearchUser = arrayListOf<SearchUserAdapterData>()
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
-                    listSearchUser.add(SearchUserAdapterData((0 until 120).random()))
+                    data.items.forEach { userItem ->
+
+                        listSearchUser.add(
+                            SearchUserAdapterData(
+                                id = userItem.id,
+                                userName = userItem.login,
+                                avatarUrl = userItem.avatar_url,
+                                githubUrl = userItem.url,
+                                score = userItem.score,
+                            )
+                        )
+                    }
                     callback.onResult(listSearchUser, nextKey)
                 }
 
