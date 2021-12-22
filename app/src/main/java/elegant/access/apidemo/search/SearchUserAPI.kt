@@ -12,7 +12,7 @@ interface SearchUserAPI {
     @GET("/search/users")
     fun searchUser(
         @Query("q") keywords: String,
-        @Query("page") page: String,
-        @Query("per_page") perPage: String
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
     ): Observable<SearchUserResult>
 }

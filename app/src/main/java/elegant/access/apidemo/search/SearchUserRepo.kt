@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SearchUserRepo @Inject constructor(private val api : SearchUserAPI) {
 
 
-    fun searchUser(keywords: String, page: String, perPage: String): Observable<SearchUserResult> =
+    fun searchUser(keywords: String, page: Int, perPage: Int): Observable<SearchUserResult> =
         api.searchUser(keywords, page, perPage)
 
 
