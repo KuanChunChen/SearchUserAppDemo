@@ -9,9 +9,7 @@ class SearchUserRepo @Inject constructor(private val api : SearchUserAPI) {
     var keywords: String = ""
 
     fun searchUser(page: Int, perPage: Int): Observable<SearchUserResult> =
-        api.searchUser(keywords, page, perPage).apply {
-
-        }
+        api.searchUser(keywords, page, perPage)
 
 
 

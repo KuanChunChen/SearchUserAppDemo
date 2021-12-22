@@ -7,6 +7,7 @@ import java.io.IOException
 import java.io.InterruptedIOException
 
 class RetryRequestByFailed internal constructor(builder: Builder) : Interceptor {
+
     private var executionCount: Int = 0
     private val retryInterval: Long
 
@@ -21,10 +22,8 @@ class RetryRequestByFailed internal constructor(builder: Builder) : Interceptor 
         var response = doRequest(chain, request)
         var retryNum = 0
         while ((response.first == null || !response.first!!.isSuccessful) && retryNum <= executionCount) {
-            //            LogTool.d("intercept Request is not successful - %d",retryNum);
             val nextInterval = retryInterval
             try {
-                //                LogTool.d("Wait for %s", nextInterval);
                 Thread.sleep(nextInterval)
             } catch (e: InterruptedException) {
                 Thread.currentThread().interrupt()

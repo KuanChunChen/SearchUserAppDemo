@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import elegant.access.apidemo.databinding.FragmentSearchUserBinding
@@ -53,9 +52,36 @@ class SearchUserFragment : Fragment() {
 
 
         val searchUserAdapter = SearchUserAdapter()
-        searchUserViewModel.pagingDataItems.observe(viewLifecycleOwner, Observer {
+        searchUserViewModel.pagingDataItems.observe(viewLifecycleOwner, {
             searchUserAdapter.submitList(it)
         })
+
+        searchUserViewModel._searchUserStats.observe(viewLifecycleOwner, { searchUserUiStats ->
+            when (searchUserUiStats) {
+                ShowResult->{
+                    binding.fab.visibility = View.VISIBLE
+                    binding.recyclerUser.visibility = View.VISIBLE
+                    binding.lyError.errorLayout.visibility = View.GONE
+
+
+                }
+                is HideResult ->{
+
+                    binding.fab.visibility = View.GONE
+                    binding.recyclerUser.visibility= View.GONE
+                    binding.lyError.errorLayout.visibility = View.VISIBLE
+                    binding.lyError.errorTxtCause.text = searchUserUiStats.message
+
+                }
+            }
+        })
+
+        binding.lyError.errorBtnRetry.setOnClickListener {
+            binding.editTextSearchName.requestFocus()
+            binding.editTextSearchName.text = binding.editTextSearchName.text
+
+        }
+
         binding.recyclerUser.layoutManager = LinearLayoutManager(context)
         binding.recyclerUser.adapter = searchUserAdapter
         binding.fab.setOnClickListener { view ->
@@ -76,3 +102,7 @@ class SearchUserFragment : Fragment() {
 
 
 }
+
+sealed class SearchUserUiStats
+object ShowResult : SearchUserUiStats()
+class HideResult(val message: String) : SearchUserUiStats()

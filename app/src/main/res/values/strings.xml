@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">SearchUserDemo</string>
     <string name="action_settings">Settings</string>
-    <string name="search_user_fragment_label">Search User Fragment</string>
+    <string name="search_user_fragment_label">KuanChunChen demo app </string>
     <string name="text_input_hint">Search user here</string>
     <string name="fab_desc">To the top</string>
-    <string name="error_msg">Sorry!Could,t search user</string>
+    <string name="error_msg">Sorry! Could not get user list</string>
     <string name="btn_retry">Retry</string>
 
 </resources>

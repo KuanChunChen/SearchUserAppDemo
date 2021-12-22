@@ -19,6 +19,7 @@
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="@string/error_msg" />
 
             <TextView
@@ -28,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_4sdp"
+                android:textColor="@android:color/holo_red_dark"
                 tools:text="The server took too long to respond." />
 
             <Button
@@ -36,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_24sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/btn_retry"
                 android:textColor="@color/purple_500" />
 
